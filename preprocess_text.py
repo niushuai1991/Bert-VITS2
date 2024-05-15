@@ -70,7 +70,8 @@ def preprocess(
                             )
                         except Exception as e:
                             print(line)
-                            print(f"生成训练集和验证集时发生错误！, 详细信息:\n{e}")
+                            print(f"生成训练集和验证集时发生错误！, error:{type(e).__name__}详细信息:\n{e}")
+                            raise e
 
     transcription_path = cleaned_path
     spk_utt_map = defaultdict(list)

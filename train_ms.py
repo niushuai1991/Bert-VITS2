@@ -56,7 +56,7 @@ def run():
     envs = config.train_ms_config.env
     for env_name, env_value in envs.items():
         if env_name not in os.environ.keys():
-            print("加载config中的配置{}".format(str(env_value)))
+            print("加载config中的配置{}:{}".format(str(env_name),str(env_value)))
             os.environ[env_name] = str(env_value)
     print(
         "加载环境变量 \nMASTER_ADDR: {},\nMASTER_PORT: {},\nWORLD_SIZE: {},\nRANK: {},\nLOCAL_RANK: {}".format(
@@ -99,7 +99,7 @@ def run():
         help="数据集文件夹路径，请注意，数据不再默认放在/logs文件夹下。如果需要用命令行配置，请声明相对于根目录的路径",
         default=config.dataset_path,
     )
-    args = parser.parse_known_args()
+    args = parser.parse_args()
     model_dir = os.path.join(args.model, config.train_ms_config.model)
     if not os.path.exists(model_dir):
         os.makedirs(model_dir, exist_ok=True)
@@ -138,7 +138,7 @@ def run():
         train_dataset,
         num_workers=min(config.train_ms_config.num_workers, os.cpu_count() - 1),
         shuffle=False,
-        pin_memory=True,
+        pin_memory=False,
         collate_fn=collate_fn,
         batch_sampler=train_sampler,
         persistent_workers=True,
@@ -151,7 +151,7 @@ def run():
             num_workers=0,
             shuffle=False,
             batch_size=1,
-            pin_memory=True,
+            pin_memory=False,
             drop_last=False,
             collate_fn=collate_fn,
         )
